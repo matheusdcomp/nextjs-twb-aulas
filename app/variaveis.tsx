@@ -1,0 +1,1 @@
+export const bgcolor1 = "bg-blue-100";

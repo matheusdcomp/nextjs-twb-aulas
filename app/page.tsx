@@ -7,8 +7,7 @@ export default function Home() {
   }
 
   return (
-    <div className="bg-blue-700">
-      <p>Matheus Viana</p>
+    <div className="h-full col-span-7 row-span-7 h-full flex flex-row content-center justify-center items-center">
       <Image
         src={"/coruja-azul.png"}
         alt="coruja"

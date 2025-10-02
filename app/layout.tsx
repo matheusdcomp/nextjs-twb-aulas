@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Topo from "./ui/topo";
+import Menu from "./ui/menu";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +29,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <div className="h-dvh grid grid-cols-8 grid-rows-8">
+          <Topo />
+          <Menu />
+          {children}
+        </div>
       </body>
     </html>
   );
