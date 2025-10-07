@@ -1,17 +1,22 @@
 import Tabela from "@/app/ui/tabela";
+import Usuario from "@/app/(entidades)/usuario/usuario";
 
-export default function Usuario() {
+export default function UsuarioPage() {
 
-  const linhas = [
-    ["1", "MATHEUS"],
-    ["2", "MARIA"],
-    ["3", "JOAO"],
+  const usuarios = [
+    new Usuario(1, "Matheus"),
+    new Usuario(2, "João"),
+    new Usuario(3, "Maria"),
   ];
 
+  const cabecalho = ["Id", "Nome"];
+  const linhas = usuarios.map(u => [u.id + "", u.nome]);
+
+
   return (
-    <div className="p-2 text-justify text-zinc-800">
+    <div className="w-100 p-2 text-justify text-zinc-800">
       <h1 className="text-blue-900 text-3xl font-bold">Usuários</h1>
-      <Tabela cabecalho={["Id", "Nome"]} linhas={linhas} />
+      <Tabela cabecalho={cabecalho} linhas={linhas} />
     </div>
   );
 }
