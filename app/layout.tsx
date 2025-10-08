@@ -32,9 +32,11 @@ export default function RootLayout({
         <div className="h-dvh grid grid-cols-8 grid-rows-8">
           <Topo />
           <Menu />
-          {children}
+          <div className='col-span-7 row-span-7 p-2 overscroll-contain overflow-y-auto'>
+            {children}
+          </div>
         </div>
       </body>
-    </html>
+    </html >
   );
 }

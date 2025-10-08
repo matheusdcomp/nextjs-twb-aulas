@@ -14,7 +14,7 @@ export default function UsuarioPage() {
 
 
   return (
-    <div className="w-100 p-2 text-justify text-zinc-800">
+    <div className="flex flex-col items-start">
       <h1 className="text-blue-900 text-3xl font-bold">Usuários</h1>
       <Tabela cabecalho={cabecalho} linhas={linhas} />
     </div>
