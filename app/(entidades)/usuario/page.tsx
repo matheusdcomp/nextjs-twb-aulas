@@ -17,6 +17,7 @@ export default function UsuarioPage() {
     <div className="flex flex-col items-start">
       <h1 className="text-blue-900 text-3xl font-bold">Usuários</h1>
       <Tabela cabecalho={cabecalho} linhas={linhas} />
+      <button className="bg-blue-600 text-zinc-200 text-bold">Adicionar</button>
     </div>
   );
 }
