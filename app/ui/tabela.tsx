@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-export default function Tabela({ cabecalho, linhas }: { cabecalho: String[], linhas: String[][] }) {
+export default function Tabela({ cabecalho, linhas, linkEditar }: { cabecalho: String[], linhas: String[][], linkEditar: string }) {
 
   function selecionarTodos() {
 
@@ -54,7 +54,7 @@ export default function Tabela({ cabecalho, linhas }: { cabecalho: String[], lin
                 <td key={"td" + col} className={cssCelula}>{col}</td>
               )}
               <td key={"tdedit"} className={cssCelula + " text-center"}>
-                <Link href={"/usuario/" + linha[0]}>✎</Link>
+                <Link href={linkEditar + linha[0]}>✎</Link>
               </td>
             </tr>
           )}
