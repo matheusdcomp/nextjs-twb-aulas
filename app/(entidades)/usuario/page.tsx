@@ -1,52 +1,48 @@
 "use client"
 import Tabela from "@/app/ui/tabela";
 import Usuario from "@/app/(entidades)/usuario/usuario";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import useSWR from "swr";
 
 export default function UsuarioPage() {
 
-  function cliqueAdicionar() {
-    setUsuarios([...usuarios, new Usuario(4, "José")]);
-    usuarios.push(new Usuario(4, "José"));
-  }
+  const fetcher = (url: string) => fetch(url).then((res => res.json()));
 
-  function linkEditar() {
-    const id = (document.getElementById("inputLink") as HTMLInputElement)!.value;
-    router.push("/usuario/" + id);
-  }
-
-  const router = useRouter();
-
-  const [usuarios, setUsuarios] = useState(
-    [
-      new Usuario(1, "Matheus"),
-      new Usuario(2, "João"),
-      new Usuario(3, "Maria"),
-    ]
+  const { data, error, isLoading } = useSWR<Usuario[]>(
+    "http://localhost:3000/usuario/api/obt?id=0",
+    fetcher
   );
 
-  const cabecalho = ["Id", "Nome"];
-  const linhas = usuarios.map(u => [u.id + "", u.nome]);
+  if (isLoading) {
+    return (
+      <div className={"text-5xl text-cor1 text-left text-bold"}>
+        <h1>Usuarios</h1>
+        <h1>Carregando...</h1>
+      </div>
+    );
+  }
 
+  if (error) {
+    return (
+      <div className={"text-5xl text-cor1 text-left text-bold"}>
+        <h1>Usuarios</h1>
+        <h1>Error ao carregar os usuarios.</h1>
+      </div>
+    );
+  }
+
+  const usuarios = data && data.length > 0 ?
+    data :
+    [new Usuario(0, "Nenhum usuário retornado", "-")];
 
   return (
     <div className="flex flex-col items-start">
-      <h1 className="text-blue-900 text-3xl font-bold">Usuários</h1>
-      <Tabela cabecalho={cabecalho} linhas={linhas} linkEditar="/usuario/" />
-      <button
-        className="bg-blue-600 text-zinc-200 text-bold p-2 "
-        onClick={cliqueAdicionar}
-      >
-        Adicionar
-      </button>
-      <label>Id do Usuário: <input type="text" id="inputLink" /></label>
-      <button
-        className="bg-blue-600 text-zinc-200 text-bold p-2 "
-        onClick={linkEditar}
-      >
-        Editar
-      </button>
+      <h1 className={"font-black text-2xl txt-cor1"}>Usuários</h1>
+      <Tabela
+        entidade={"usuario"}
+        cabecalho={["Id", "Nome", "Email"]}
+        linhas={usuarios.map(u => [u.id + "", u.nome, u.email])}
+      />
     </div>
   );
 }
