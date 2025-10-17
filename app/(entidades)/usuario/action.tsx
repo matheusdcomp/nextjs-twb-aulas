@@ -1,61 +1,53 @@
 "use server"
+import { Usuario } from "@/app/generated/prisma";
+import prisma from "@/data/prisma";
 
-async function get(url: string) {
-  const res = await fetch(url);
-  return res.json();
+
+export async function adcUsuario(usuario: Usuario): Promise<Usuario> {
+  return await prisma.usuario.create({
+    data: {
+      nome: usuario.nome,
+      email: usuario.email,
+    },
+  });
 }
 
-async function post(url: string, obj: string) {
-
-  const res = await fetch(url, { method: 'POST', body: obj });
-
-  if (!res.ok) {
-    throw new Error('Falha em executar a ação do formulário.');
-  }
-  return res.json();
+export async function edtUsuario(usuario: Usuario): Promise<Usuario> {
+  return await prisma.usuario.update({
+    where: {
+      id: usuario.id,
+    },
+    data: {
+      nome: usuario.nome,
+      email: usuario.email,
+    },
+  });
 }
 
-export async function adcUsuario(props: string[]) {
-
-  const res = await post(
-    'http://localhost:3000/usuario/api/adc',
-    `{"nome":"${props[0]}", "email":"${props[1]}"}`
-  );
-
-  if (res.mensagem) {
-    return `Novo usuario adicionado: ${props[0]}`;
-  }
-  else {
-    return `Não foi possível adicionar o usuario: ${props[0]}`;
-  }
+export async function obtUsuarios(): Promise<Usuario[]> {
+  return await prisma.usuario.findMany();
 }
 
-export async function edtUsuario(props: string[]) {
-
-  const res = await get(
-    "http://localhost:3000/usuario/api/edt" +
-    `?id=${props[0]}&nome=${props[1]}&email=${props[2]}`
-  );
-
-  if (res.mensagem) {
-    return `O usuario ${props[1]} foi editado.`;
-  }
-  else {
-    return `Não foi possível editar o usuario ${props[0]}`;
-  }
+export async function obtUsuarioPorId(id: number): Promise<Usuario | null> {
+  return await prisma.usuario.findUnique({
+    where: {
+      id: id
+    }
+  });
 }
 
-export async function remUsuario(id: number) {
+export async function obtUsuarioPorNome(nome: string): Promise<Usuario | null> {
+  return await prisma.usuario.findFirst({
+    where: {
+      nome: nome
+    }
+  });
+}
 
-  const res = await post(
-    "http://localhost:3000/usuario/api/rem",
-    `{"id":"${id}"}`
-  );
-
-  if (res.mensagem) {
-    return `O usuario com ID: ${id} foi removido.`;
-  }
-  else {
-    return `Não foi possível remover o usuario com ID: ${id}`;
-  }
+export async function remUsuario(id: number): Promise<Usuario> {
+  return await prisma.usuario.delete({
+    where: {
+      id: Number(id),
+    }
+  });
 }

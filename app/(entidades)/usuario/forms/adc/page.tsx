@@ -1,7 +1,9 @@
 'use client'
-import { adcUsuario } from "@/app/(entidades)/usuario/action";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { adcUsuario } from "@/app/(entidades)/usuario/action";
+import { Usuario } from "@/app/generated/prisma";
+
 
 export default function UsuarioAdcForm() {
 
@@ -11,12 +13,13 @@ export default function UsuarioAdcForm() {
 
     const form = document.forms[0];
 
-    const props: string[] = [
-      form["usuarioNome"].value,
-      form["usuarioEmail"].value,
-    ]
+    const usuario: Usuario = {
+      id: 0,
+      nome: form["usuarioNome"].value,
+      email: form["usuarioEmail"].value,
+    };
 
-    adcUsuario(props).then(msn => alert(msn));
+    adcUsuario(usuario).then(usuario => alert("Usuario adiconado: " + usuario.nome));
     router.push("/usuario");
   }
 
