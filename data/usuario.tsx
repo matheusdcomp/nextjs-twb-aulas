@@ -1,66 +1,52 @@
-import Usuario from "@/app/(entidades)/usuario/usuario";
-import fs from "fs";
-
-const arquivo = "/data/usuarios.json";
+import { Usuario } from "@/app/generated/prisma";
+import prisma from "@/data/prisma";
 
 
-export function obtUsuarios(): Usuario[] {
-  const arq = fs.readFileSync(process.cwd() + arquivo, "utf8");
-  return JSON.parse(arq);
+export async function adcUsuario(usuario: Usuario): Promise<Usuario> {
+  return await prisma.usuario.create({
+    data: {
+      nome: usuario.nome,
+      email: usuario.email,
+    },
+  });
 }
 
-export function obtUsuario(id: number) {
-  return obtUsuarios().find(t => t.id == id);
+export async function edtUsuario(usuario: Usuario): Promise<Usuario> {
+  return await prisma.usuario.update({
+    where: {
+      id: usuario.id,
+    },
+    data: {
+      nome: usuario.nome,
+      email: usuario.email,
+    },
+  })
 }
 
-export function adcUsuario(cliente: Usuario): boolean {
-
-  const lista = obtUsuarios();
-  lista.push(cliente);
-
-  try {
-    const arq = fs.writeFileSync(
-      process.cwd() + arquivo,
-      JSON.stringify(lista),
-      'utf8');
-    return true;
-  }
-  catch (e) {
-    return false;
-  }
+export async function obtUsuarios(): Promise<Usuario[]> {
+  return await prisma.usuario.findMany();
 }
 
-export function edtUsuario(cliente: Usuario): boolean {
-
-  const lista = obtUsuarios().map(
-    c => c.id == cliente.id ? cliente : c
-  );
-
-  try {
-    const arq = fs.writeFileSync(
-      process.cwd() + arquivo,
-      JSON.stringify(lista),
-      'utf8');
-    return true;
-  }
-  catch (e) {
-    return false;
-  }
+export async function obtUsuarioPorId(id: number): Promise<Usuario | null> {
+  return await prisma.usuario.findUnique({
+    where: {
+      id: id
+    }
+  });
 }
 
+export async function obtUsuarioPorNome(nome: string): Promise<Usuario | null> {
+  return await prisma.usuario.findFirst({
+    where: {
+      nome: nome
+    }
+  });
+}
 
-export function remUsuario(id: number): boolean {
-
-  const lista = obtUsuarios().filter(c => c.id != id);
-
-  try {
-    const arq = fs.writeFileSync(
-      process.cwd() + arquivo,
-      JSON.stringify(lista),
-      'utf8');
-    return true;
-  }
-  catch (e) {
-    return false;
-  }
+export async function remUsuario(id: number): Promise<Usuario> {
+  return await prisma.usuario.delete({
+    where: {
+      id: id,
+    }
+  });
 }

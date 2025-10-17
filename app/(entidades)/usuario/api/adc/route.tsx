@@ -1,16 +1,17 @@
-import { adcUsuario } from "@/data/usuarios";
-import Usuario from "@/app/(entidades)/usuario/usuario";
+import { adcUsuario } from "@/data/usuario";
 
 
 export async function POST(request: Request) {
 
   const req = await request.json();
 
-  if (req.id && req.nome && req.email) {
+  if (req.nome && req.email) {
     return Response.json({
-      mensagem: adcUsuario(
-        new Usuario(Number(req.id), req.nome, req.email)
-      )
+      mensagem: adcUsuario({
+        id: 0,
+        nome: req.nome,
+        email: req.email
+      })
     });
   }
   else return Response.json({ mensagem: false });

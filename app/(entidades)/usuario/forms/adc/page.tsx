@@ -1,5 +1,4 @@
 'use client'
-
 import { adcUsuario } from "@/app/(entidades)/usuario/action";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -10,14 +9,14 @@ export default function UsuarioAdcForm() {
 
   function cliqueConfirmar() {
 
-    const valores: string[] = [];
+    const form = document.forms[0];
 
-    const inputs: NodeListOf<HTMLInputElement> =
-      document.querySelectorAll("#formulario input");
+    const props: string[] = [
+      form["usuarioNome"].value,
+      form["usuarioEmail"].value,
+    ]
 
-    inputs.forEach(i => valores.push(i.value));
-
-    adcUsuario(valores).then(msn => alert(msn));
+    adcUsuario(props).then(msn => alert(msn));
     router.push("/usuario");
   }
 
@@ -27,19 +26,7 @@ export default function UsuarioAdcForm() {
 
   return (
     <div className="w-full">
-      <form
-        id="formulario"
-        name="formulario"
-        className="w-full text-left">
-        <label className={cssLabel}>
-          <span className={cssSpan}>Id:</span>
-          <input
-            className={cssInput}
-            type="text"
-            id="usuarioId"
-            name="usuarioId"
-            required />
-        </label>
+      <form className="w-full text-left">
         <label className={cssLabel}>
           <span className={cssSpan}>Nome:</span>
           <input

@@ -1,4 +1,4 @@
-import { obtUsuario, obtUsuarios } from "@/data/usuarios";
+import { obtUsuarios, obtUsuarioPorId } from "@/data/usuario";
 
 
 export async function GET(request: Request) {
@@ -7,10 +7,11 @@ export async function GET(request: Request) {
   const id = searchParams.get('id');
 
   if (Number(id) <= 0) {
-    return Response.json(obtUsuarios());
+    const usuarios = await obtUsuarios();
+    return Response.json(usuarios);
   }
   if (Number(id) > 0) {
-    return Response.json(obtUsuario(Number(id)));
+    return Response.json(obtUsuarioPorId(Number(id)));
   }
   else return Response.json(undefined);
 }

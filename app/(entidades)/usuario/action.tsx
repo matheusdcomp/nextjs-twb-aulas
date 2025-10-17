@@ -19,14 +19,14 @@ export async function adcUsuario(props: string[]) {
 
   const res = await post(
     'http://localhost:3000/usuario/api/adc',
-    `{"id":"${props[0]}", "nome":"${props[1]}", "email":"${props[2]}"}`
+    `{"nome":"${props[0]}", "email":"${props[1]}"}`
   );
 
   if (res.mensagem) {
-    return `Novo usuario adicionado: ${props[1]}`;
+    return `Novo usuario adicionado: ${props[0]}`;
   }
   else {
-    return `Não foi possível adicionar o usuario: ${props[1]}`;
+    return `Não foi possível adicionar o usuario: ${props[0]}`;
   }
 }
 

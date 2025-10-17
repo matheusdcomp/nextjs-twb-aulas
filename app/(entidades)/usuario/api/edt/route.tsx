@@ -1,5 +1,4 @@
-import { edtUsuario } from "@/data/usuarios";
-import Usuario from "@/app/(entidades)/usuario/usuario";
+import { edtUsuario } from "@/data/usuario";
 
 
 export async function POST(request: Request) {
@@ -8,9 +7,11 @@ export async function POST(request: Request) {
 
   if (req.id && req.nome && req.email) {
     return Response.json({
-      mensagem: edtUsuario(
-        new Usuario(Number(req.id), req.nome, req.email)
-      )
+      mensagem: edtUsuario({
+        id: Number(req.id),
+        nome: req.nome,
+        email: req.email
+      })
     });
   }
   else return Response.json({ mensagem: false });

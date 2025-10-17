@@ -1,4 +1,4 @@
-import { remUsuario } from "@/data/usuarios";
+import { remUsuario } from "@/data/usuario";
 
 
 export async function POST(request: Request) {
