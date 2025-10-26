@@ -1,69 +1,60 @@
 'use client'
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { adcUsuario } from "@/app/(entidades)/usuario/action";
-import { Usuario } from "@/app/generated/prisma";
-
+import { useActionState } from "react";
+import SubmitButton from "@/app/ui/submit";
+import Link from "next/link";
 
 export default function UsuarioAdcForm() {
 
-  const router = useRouter();
-
-  function cliqueConfirmar() {
-
-    const form = document.forms[0];
-
-    const usuario: Usuario = {
-      id: 0,
-      nome: form["usuarioNome"].value,
-      email: form["usuarioEmail"].value,
-    };
-
-    adcUsuario(usuario).then(usuario => alert("Usuario adiconado: " + usuario.nome));
-    router.push("/usuario");
-  }
+  const [state, formAction] = useActionState(
+    adcUsuario,
+    { status: true, mensagem: "" }
+  );
 
   const cssLabel = "w-full block m-2 text-cor1"
   const cssSpan = "inline-block w-1/10 font-bold"
   const cssInput = "w-8/10 border border-cor1 ml-1";
+  const cssButton = "m-2 p-2 bg-blue-900 text-zinc-200 text-center font-bold hover:bg-zinc-800";
+  const cssMensagemT = "w-full bg-blue-200 text-cor1 text-bold";
+  const cssMensagemF = "w-full bg-red-900 text-cor3 text-bold";
 
   return (
     <div className="w-full">
-      <form className="w-full text-left">
+      <form className="w-full text-left" action={formAction}>
         <label className={cssLabel}>
           <span className={cssSpan}>Nome:</span>
           <input
             className={cssInput}
             type="text"
-            id="usuarioNome"
-            name="usuarioNome"
+            id="nome"
+            name="nome"
             required />
         </label>
         <label className={cssLabel}>
           <span className={cssSpan}>Email:</span>
           <input
             className={cssInput}
-            type="text"
-            id="usuarioEmail"
-            name="usuarioEmail"
+            type="email"
+            id="email"
+            name="email"
             required />
         </label>
-      </form>
-      <div className="w-full bg-blue-200">
-        <button
-          className="m-2 p-2 bg-blue-900 text-zinc-200 text-center font-bold hover:bg-zinc-800"
-          onClick={cliqueConfirmar}
+        <div className="w-full bg-blue-200">
+          <SubmitButton estilo={cssButton} rotulo="Confirmar" />
+          <Link href="/usuario">
+            <button type="button" className={cssButton}>
+              Cancelar
+            </button>
+          </Link>
+        </div>
+        <p
+          className={state.status ? cssMensagemT : cssMensagemF}
+          aria-live="polite"
+          role="status"
         >
-          Confirmar
-        </button>
-        <Link href="/usuario">
-          <button
-            className="m-2 p-2 bg-blue-900 text-zinc-200 text-center font-bold hover:bg-zinc-800"
-          >
-            Cancelar
-          </button>
-        </Link>
-      </div>
+          {state.mensagem}
+        </p>
+      </form>
     </div>
   );
 }

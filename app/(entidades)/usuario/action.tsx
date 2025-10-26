@@ -1,15 +1,51 @@
 "use server"
-import { Usuario } from "@/app/generated/prisma";
 import prisma from "@/data/prisma";
+import { Usuario } from "@/app/generated/prisma";
+import { revalidatePath } from "next/cache";
+import { z } from "zod";
 
 
-export async function adcUsuario(usuario: Usuario): Promise<Usuario> {
-  return await prisma.usuario.create({
+export async function adcUsuario(prevState: any, formData: FormData) {
+
+  const schema = z.object({
+    nome: z.string().min(1, "Informe o nome do cliente"),
+    email: z.email("Email inválido"),
+  });
+
+  const parse = schema.safeParse({
+    nome: formData.get("nome"),
+    email: formData.get("email"),
+  });
+
+  if (!parse.success) {
+    return {
+      status: false,
+      mensagem: "Dados do formulário informados incorretamente."
+    }
+  }
+
+  const usuario = parse.data;
+
+  const res = await prisma.usuario.create({
     data: {
       nome: usuario.nome,
       email: usuario.email,
     },
   });
+
+  if (res) {
+    revalidatePath("/usuario");
+    return {
+      status: true,
+      mensagem: `Novo usuário adicionado: ${usuario.nome}`
+    };
+  }
+  else {
+    return {
+      status: false,
+      mensagem: `Não foi possível adicionar o usuário: ${usuario.nome}`
+    };
+  }
 }
 
 export async function edtUsuario(usuario: Usuario): Promise<Usuario> {
