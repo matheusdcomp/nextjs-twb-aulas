@@ -4,7 +4,7 @@ import { remUsuario } from "@/app/(entidades)/usuario/action";
 import { useRouter } from "next/navigation";
 import { use } from "react";
 
-export default function RemUsuario({ params }: { params: Promise<{ id: number }> }) {
+export default function RemUsuario({ params }: { params: Promise<{ id: string }> }) {
 
   const args = use(params);
   const router = useRouter();

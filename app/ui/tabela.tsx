@@ -84,8 +84,12 @@ export default function Tabela({
         key={"acoes" + i}
         className={`font-sans font-bold text-center ${cssCelulaTD}`}
       >
-        <Link href={"/" + entidade.toLowerCase() + "/forms/edt/" + lnh[0]}>✎</Link>
-        <Link href={"/" + entidade.toLowerCase() + "/forms/rem/" + lnh[0]}>🗑</Link>
+        <Link href={"/" + entidade.toLowerCase() + "/forms/edt/" + lnh[0]}>
+          <span className="inline-block pr-2">✎</span>
+        </Link>
+        <Link href={"/" + entidade.toLowerCase() + "/forms/rem/" + lnh[0]}>
+          <span className="inline-block pl-2">🗑</span>
+        </Link>
       </td>
     </tr>
   ));
@@ -133,6 +137,5 @@ export function obterSelecionadas(apenasUm: boolean) {
       if (apenasUm) break;
     }
   }
-
   return entidades;
 }

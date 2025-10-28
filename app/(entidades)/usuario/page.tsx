@@ -1,12 +1,12 @@
 "use client"
 import Tabela from "@/app/ui/tabela";
-import { Usuario } from "@/app/generated/prisma";
+import { User } from "@/app/generated/prisma";
 import { useEffect, useState } from "react";
 import { obtUsuarios } from "./action";
 
 export default function UsuarioPage() {
 
-  const [usuarios, setUsuarios] = useState(new Array<Usuario>());
+  const [usuarios, setUsuarios] = useState(new Array<User>());
 
   useEffect(() => {
     obtUsuarios().then((value) => setUsuarios(value));
@@ -17,8 +17,8 @@ export default function UsuarioPage() {
       <h1 className={"font-black text-2xl txt-cor1"}>Usuários</h1>
       <Tabela
         entidade={"usuario"}
-        cabecalho={["Id", "Nome", "Email"]}
-        linhas={usuarios.map(u => [u.id + "", u.nome, u.email])}
+        cabecalho={["Nome", "Email", "Tipo"]}
+        linhas={usuarios.map(u => [u.name, u.email, u.tipo])}
       />
     </div>
   );
