@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Topo from "./ui/topo";
 import Menu from "./ui/menu";
+import { SessionProvider } from "next-auth/react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,13 +30,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="h-dvh grid grid-cols-8 grid-rows-8">
-          <Topo />
-          <Menu />
-          <div className='col-span-7 row-span-7 p-2 overscroll-contain overflow-y-auto'>
-            {children}
+        <SessionProvider>
+          <div className="h-dvh grid grid-cols-8 grid-rows-8">
+            <Topo />
+            <Menu />
+            <div className='col-span-7 row-span-7 p-2 overscroll-contain overflow-y-auto'>
+              {children}
+            </div>
           </div>
-        </div>
+        </SessionProvider>
       </body>
     </html >
   );

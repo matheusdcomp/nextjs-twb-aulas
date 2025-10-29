@@ -6,7 +6,7 @@ import { prisma } from "@/app/lib/data/prisma";
 import { Tipo } from "@/app/generated/prisma";
 import { z } from "zod";
 import { obtUsuarioPorEmail } from "@/app/(entidades)/usuario/action";
-//import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 
 const providers: Provider[] = [
@@ -36,16 +36,16 @@ const providers: Provider[] = [
         return null;
       }
 
-      //const passwordsMatch = await bcrypt.compare(
-      //  password,
-      //  usuario.password
-      //);
+      const passwordsMatch = await bcrypt.compare(
+        password,
+        usuario.password
+      );
 
-      //if (passwordsMatch) 
+      if (passwordsMatch) 
         return usuario;
 
-      //console.log("Email e/ou senha incorreta.");
-      //return null;      
+      console.log("Email e/ou senha incorreta.");
+      return null;      
     },
   }),
 ];

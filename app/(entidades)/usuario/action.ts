@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { signIn, signOut } from "@/app/lib/auth/auth";
 import { redirect } from "next/navigation";
+import bcrypt from 'bcryptjs'; 
 
 export async function efetuarLogin(prevState: any, formData: FormData) {
 
@@ -64,14 +65,14 @@ export async function adcUsuario(prevState: any, formData: FormData) {
     }
   }
 
-  const user = parse.data;
+  const usuario = parse.data;
 
   const res = await prisma.user.create({
     data: {
-      name: user.nome,
-      email: user.email,
-      password: user.senha,
-      tipo: user.tipo ? "admin" : "usuario",
+      name: usuario.nome,
+      email: usuario.email,
+      password: await criptografarSenha(usuario.senha),
+      tipo: usuario.tipo ? "admin" : "usuario",
     },
   });
 
@@ -79,13 +80,13 @@ export async function adcUsuario(prevState: any, formData: FormData) {
     revalidatePath("/usuario");
     return {
       status: true,
-      mensagem: `Novo usuário adicionado: ${user.nome}`
+      mensagem: `Novo usuário adicionado: ${usuario.nome}`
     };
   }
   else {
     return {
       status: false,
-      mensagem: `Não foi possível adicionar o usuário: ${user.nome}`
+      mensagem: `Não foi possível adicionar o usuário: ${usuario.nome}`
     };
   }
 }
@@ -98,7 +99,7 @@ export async function edtUsuario(usuario: User): Promise<User> {
     data: {
       name: usuario.name,
       email: usuario.email,
-      password: usuario.password,
+      password: await criptografarSenha(usuario.password),
       tipo: usuario.tipo ? "admin" : "usuario",
     },
   });
@@ -138,4 +139,25 @@ export async function remUsuario(id: string): Promise<User> {
       id: id,
     }
   });
+} 
+
+export async function verificarSenha(plainPassword:string, hashedPassword:string) {
+  try {
+    const match = await bcrypt.compare(plainPassword, hashedPassword);
+    return match; // true if passwords match, false otherwise
+  } catch (error) {
+    console.error("Error comparing passwords:", error);
+    throw error;
+  }
+}
+
+export async function criptografarSenha(senha:string) {
+  const saltRounds = 10;
+  try {
+    const hashedPassword = await bcrypt.hash(senha, saltRounds);
+    return hashedPassword;
+  } catch (error) {
+    console.error("Error hashing password:", error);
+    throw error;
+  }
 }
