@@ -17,8 +17,8 @@ export default function UsuarioPage() {
       <h1 className={"font-black text-2xl txt-cor1"}>Usuários</h1>
       <Tabela
         entidade={"usuario"}
-        cabecalho={["Nome", "Email", "Tipo"]}
-        linhas={usuarios.map(u => [u.name, u.email, u.tipo])}
+        cabecalho={["Id", "Nome", "Email", "Tipo"]}
+        linhas={usuarios.map(u => [u.id, u.name, u.email, u.tipo])}
       />
     </div>
   );

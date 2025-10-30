@@ -1,4 +1,3 @@
-import "@/app/globals.css";
 import Login from "./login";
 import Image from "next/image";
 
