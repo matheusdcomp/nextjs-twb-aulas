@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { use } from "react";
 
-export default function EdtUsuario({ params }: { params: Promise<{ id: number }> }) {
+export default function EdtUsuario({ params }: { params: Promise<{ id: string }> }) {
 
   const args = use(params);
 
