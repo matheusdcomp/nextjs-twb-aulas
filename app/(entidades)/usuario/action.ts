@@ -141,12 +141,12 @@ export async function remUsuario(id: string): Promise<User> {
   });
 } 
 
-export async function verificarSenha(plainPassword:string, hashedPassword:string) {
+export async function verificarSenha(senha:string, senhaCriptografada:string) {
   try {
-    const match = await bcrypt.compare(plainPassword, hashedPassword);
-    return match; // true if passwords match, false otherwise
+    const match = await bcrypt.compare(senha, senhaCriptografada);
+    return match; 
   } catch (error) {
-    console.error("Error comparing passwords:", error);
+    console.error("A senha está incorreta:", error);
     throw error;
   }
 }
@@ -157,7 +157,7 @@ export async function criptografarSenha(senha:string) {
     const hashedPassword = await bcrypt.hash(senha, saltRounds);
     return hashedPassword;
   } catch (error) {
-    console.error("Error hashing password:", error);
+    console.error("Erro ao criptografar a senha:", error);
     throw error;
   }
 }
