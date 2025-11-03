@@ -147,7 +147,7 @@ export async function verificarSenha(senha:string, senhaCriptografada:string) {
     return match; 
   } catch (error) {
     console.error("A senha está incorreta:", error);
-    throw error;
+    return false;
   }
 }
 
@@ -158,6 +158,6 @@ export async function criptografarSenha(senha:string) {
     return hashedPassword;
   } catch (error) {
     console.error("Erro ao criptografar a senha:", error);
-    throw error;
+    return "";
   }
 }

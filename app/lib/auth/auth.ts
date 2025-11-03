@@ -5,8 +5,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/app/lib/data/prisma";
 import { Tipo } from "@/app/generated/prisma";
 import { z } from "zod";
-import { obtUsuarioPorEmail } from "@/app/(entidades)/usuario/action";
-import bcrypt from 'bcryptjs';
+import { obtUsuarioPorEmail, verificarSenha } from "@/app/(entidades)/usuario/action";
 
 
 const providers: Provider[] = [
@@ -32,16 +31,13 @@ const providers: Provider[] = [
       const usuario = await obtUsuarioPorEmail(email);
       
       if (!usuario) {
-        console.log("Não existe usuário com esse email e/ou senha.");
+        console.log("Não existe usuário com esse email.");
         return null;
       }
 
-      const passwordsMatch = await bcrypt.compare(
-        password,
-        usuario.password
-      );
+      const senhaOK = await verificarSenha(password, usuario.password);
 
-      if (passwordsMatch) 
+      if (senhaOK) 
         return usuario;
 
       console.log("Email e/ou senha incorreta.");
