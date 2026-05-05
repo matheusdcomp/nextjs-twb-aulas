@@ -1,4 +1,4 @@
-import { obtUsuario, obtUsuarios } from "@/data/usuarios";
+import { obtUsuario, obtUsuarios } from "@/data/usuario";
 
 
 export async function GET(request: Request) {

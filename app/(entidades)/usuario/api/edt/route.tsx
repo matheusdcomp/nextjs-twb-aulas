@@ -1,4 +1,4 @@
-import { edtUsuario } from "@/data/usuarios";
+import { edtUsuario } from "@/data/usuario";
 import Usuario from "@/app/(entidades)/usuario/usuario";
 
 

@@ -1,0 +1,116 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/**
+ * model Usuario {
+ * id     Int     @id @default(autoincrement())
+ * nome   String
+ * email  String  @unique
+ * senha  String
+ * tipo   String
+ * }
+ */
+
+enum Tipo {
+  usuario
+  admin
+}
+
+//Schema do next.auth
+model User {
+  id       String    @id @default(cuid())
+  name     String?
+  email    String    @unique
+  //emailVerified DateTime?
+  //image         String?
+  password String
+  accounts Account[]
+  sessions Session[]
+  tipo     Tipo      @default(usuario) //Esse atributo eu adicionei
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+/**
+ * DEIXEI COMENTADO ABAIXO UM EXEMPLO MAIS COMPLETO:
+ * model Cliente {
+ * id     Int     @id @default(autoincrement())
+ * nome   String
+ * email  String  @unique
+ * vendas Venda[]
+ * }
+ * model Produto {
+ * id     Int         @id @default(autoincrement())
+ * nome   String
+ * valor  Decimal     @db.Money
+ * vendas ItemVenda[]
+ * }
+ * model Venda {
+ * id        Int         @id @default(autoincrement())
+ * dthr      DateTime    @default(now())
+ * cliente   Cliente     @relation(fields: [clienteId], references: [id])
+ * clienteId Int
+ * itens     ItemVenda[]
+ * }
+ * model ItemVenda {
+ * venda     Venda   @relation(fields: [vendaId], references: [id])
+ * vendaId   Int
+ * produto   Produto @relation(fields: [produtoId], references: [id])
+ * produtoId Int
+ * valor     Decimal @db.Money
+ * @@id([vendaId, produtoId])
+ * }
+ */
